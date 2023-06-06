@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="8333b0be-9a4c-4de8-988f-1cdd3992f39b" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="cloudhubFlow" doc:id="ea0da9e4-5076-4761-b419-4d1b12c870e5" >
+		<http:listener doc:name="Listener" doc:id="baf104da-3f5f-4429-9d9a-dc4bcb754a3f" config-ref="HTTP_Listener_config" path="/ch"/>
+		<ee:transform doc:name="Transform Message" doc:id="69983525-5692-4363-8062-5f168dc493da" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+"Cloud hub deployment"]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<raise-error doc:name="Raise error" doc:id="98241c83-b8f5-47e6-9f7e-0d598f5b5afb" type="GONE:CASE" description='"shazia"'/>
+		<error-handler>
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="07a06679-59aa-4349-ab64-688ae146104b" type="GONE:CASE">
+				<logger level="INFO" doc:name="Logger" doc:id="0923721d-2e42-4a0c-9024-ea857c03478e" message="Ni hao"/>
+			</on-error-continue>
+		</error-handler>
+	</flow>
+</mule>
